@@ -7,43 +7,59 @@
 	<script>
 		var cats = [
 			{
-				"id" : "#name1",
-				"name" : "Fred",
+				"number" : "1",
+				"catName" : "Fred",
 			},
 			{
-				"id" : "#name2",
-				"name" : "Ethel",
-			}
+				"number" : "2",
+				"catName" : "Ethel",
+			},
+			{
+				"number" : "3",
+				"catName" : "Ricky",
+			},
+			{
+				"number" : "4",
+				"catName" : "Lucy",
+			},
+			{
+				"number" : "5",
+				"catName" : "Groucho",
+			},
 		];
-		var clicks1 = 0;
-		var clicks2 = 0;
+		
+		var clicks = [0];
+
+		var catBuilder = "<div class='cat'><div class='name' id='name%id%'>%name%</div><div class='catImg'><img id='clickableCat%id%' src='img/cat%id%.jpg'></div><div class='number' id='number%id%'>0</div></div>";
+
 		$(document).ready(function() {
 			for (i in cats) {
-				$(cats[i].id).text(cats[i].name);
+				// declare which cat we're working on
+				var catNumber = cats[i].number;
+				// add a counter for the new cat to our counter array
+				clicks[catNumber] = 0;
+				// build the cat in the DOM
+				var builtCat = catBuilder.replace(/%id%/g, catNumber);
+				console.log(builtCat);
+				var namedCat = builtCat.replace("%name%", cats[i].catName);
+				$("#catContainer").append(namedCat);
+				// select the cat div
+				var clickableId = "#clickableCat" + catNumber;
+				// store the cat ID number in an IIFE, build the new click listener
+				$(clickableId).click(function(numberCopy){
+					return function() {
+						var numberId = "#number" + numberCopy;
+						clicks[numberCopy] = clicks[numberCopy] + 1;
+						$(numberId).text(clicks[numberCopy]);
+						}
+					}(catNumber)) 
 			}
-			$('#clickableCat1').click(function() {
-					clicks1 = clicks1 + 1;
-					$('#number1').text(clicks1);
-				});
-			$('#clickableCat2').click(function() {
-					clicks2 = clicks2 + 1;
-					$('#number2').text(clicks2);
-				});			
 		});
 	</script>
 </head>
 <body>
-	<div class="container">
-		<div class="cat">
-			<div class="name" id="name1"></div>
-			<div class="catImg"><img id="clickableCat1" src="img/cat1.jpg"></div>
-			<div class="number" id="number1">0</div>
-		</div>
-		<div class="cat">
-			<div class="name" id="name2"></div>
-			<div class="catImg"><img id="clickableCat2" src="img/cat2.jpg"></div>
-			<div class="number" id="number2">0</div>
-		</div>
+	<div class="container" id="catContainer">
+
 	</div>
 </body>
 </html>
