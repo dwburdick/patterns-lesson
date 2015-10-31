@@ -5,19 +5,45 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<title>Cat clicker 0.1</title>
 	<script>
-		var clicks = 0;
+		var cats = [
+			{
+				"id" : "#name1",
+				"name" : "Fred",
+			},
+			{
+				"id" : "#name2",
+				"name" : "Ethel",
+			}
+		];
+		var clicks1 = 0;
+		var clicks2 = 0;
 		$(document).ready(function() {
-			$('#clickableCat').click(function() {
-					clicks = clicks + 1;
-					$('#number').text(clicks);
+			for (i in cats) {
+				$(cats[i].id).text(cats[i].name);
+			}
+			$('#clickableCat1').click(function() {
+					clicks1 = clicks1 + 1;
+					$('#number1').text(clicks1);
 				});
+			$('#clickableCat2').click(function() {
+					clicks2 = clicks2 + 1;
+					$('#number2').text(clicks2);
+				});			
 		});
 	</script>
 </head>
 <body>
 	<div class="container">
-		<div class="cat"><img id="clickableCat" src="img/cat.jpg"></div>
-		<div class="number"><p id="number">0</p></div>
+		<div class="cat">
+			<div class="name" id="name1"></div>
+			<div class="catImg"><img id="clickableCat1" src="img/cat1.jpg"></div>
+			<div class="number" id="number1">0</div>
+		</div>
+		<div class="cat">
+			<div class="name" id="name2"></div>
+			<div class="catImg"><img id="clickableCat2" src="img/cat2.jpg"></div>
+			<div class="number" id="number2">0</div>
+		</div>
 	</div>
 </body>
 </html>

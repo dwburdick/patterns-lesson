@@ -1,0 +1,20 @@
+body {
+
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+.container {
+	display: -webkit-flex;
+    -webkit-flex-wrap: wrap;	
+	flex-wrap: wrap;
+	display: flex;
+}
+
+.cat {
+	width: calc((100% - 10px)/2);
+	margin: 2px;
+}
