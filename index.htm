@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<title>Cat clicker 0.1</title>
+	<script>
+		var clicks = 0;
+		$(document).ready(function() {
+			$('#clickableCat').click(function() {
+					clicks = clicks + 1;
+					$('#number').text(clicks);
+				});
+		});
+	</script>
+</head>
+<body>
+	<div class="container">
+		<div class="cat"><img id="clickableCat" src="img/cat.jpg"></div>
+		<div class="number"><p id="number">0</p></div>
+	</div>
+</body>
+</html>
