@@ -17,7 +17,6 @@ img {
 .cat {
 	width: calc((100% - 10px)/2);
 	margin: 2px;
-	display: none;
 }
 
 .catImg {

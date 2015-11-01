@@ -3,83 +3,112 @@
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<title>Cat clicker 0.1</title>
+	<title>Cat clicker 0.4</title>
 	<script>
-		var cats = [
-			{
-				"number" : "1",
-				"catName" : "Fred",
-			},
-			{
-				"number" : "2",
-				"catName" : "Ethel",
-			},
-			{
-				"number" : "3",
-				"catName" : "Ricky",
-			},
-			{
-				"number" : "4",
-				"catName" : "Lucy",
-			},
-			{
-				"number" : "5",
-				"catName" : "Groucho",
-			},
-		];
+			var currentCat = 0;
 
-		var clicks = [0];
+			var model = {
+				cats: [
+					{
+						"number" : "1",
+						"catName" : "Fred",
+						"clickCount" : 0
+					},
+					{
+						"number" : "2",
+						"catName" : "Ethel",
+						"clickCount" : 0
+					},
+					{
+						"number" : "3",
+						"catName" : "Ricky",
+						"clickCount" : 0
+					},
+					{
+						"number" : "4",
+						"catName" : "Lucy",
+						"clickCount" : 0
+					},
+					{
+						"number" : "5",
+						"catName" : "Groucho",
+						"clickCount" : 0
+					},
+				],
+			};
 
-		var catBuilder = "<div class='cat' id='cat%id%'><div class='name' id='name%id%'>%name%</div><div class='number' id='number%id%'>0</div><div class='catImg'><img class='catImg' id='clickableCat%id%' src='img/cat%id%.jpg'></div></div>";
+			var octopus = {
+				clickInit: function() {
+					$(document).ready(function(cat) {
+						$("#catContainer").click(function(){
+							octopus.clickUp(cat);
+						});
+					});
+				},
+				clickUp: function() {
+					model.cats[currentCat].clickCount++;
+				}
+			};
 
-		var listBuilder = "<li><a href='#' id='%name%'>%name%</a></li>"
-		var toggledCat = [];
-		$(document).ready(function() {
-			for (i in cats) {
-				// declare which cat we're working on
-				var catNumber = cats[i].number;
-				var catName = cats[i].catName;
-				// add a counter for the new cat to our counter array
-				clicks[catNumber] = 0;
-				// build the cat in the DOM
-				var builtCat = catBuilder.replace(/%id%/g, catNumber);
-				var namedCat = builtCat.replace("%name%", catName);
-				$("#catContainer").append(namedCat);
-				// select the cat div
-				var clickableId = "#clickableCat" + catNumber;
-				//make the clickable cat list
-				var builtListItem = listBuilder.replace(/%name%/g, catName);
-				$("#catList").append(builtListItem);
-				// store the cat ID number in an IIFE, build the new click listener
-				$(clickableId).click(function(numberCopy){
-					return function() {
-						var numberId = "#number" + numberCopy;
-						clicks[numberCopy] = clicks[numberCopy] + 1;
-						$(numberId).text(clicks[numberCopy]);
+			var viewCat = {
+				render: function(cat) {
+					$("#catContainer").empty();
+					var catBuilder = "<div class='cat'><div class='name' id='name%id%'>%name%</div><div class='number'>0</div><div class='catImg'><img class='catImg' id='clickableCat%id%' src='img/cat%id%.jpg'></div></div>";
+					var catNumber = model.cats[cat].number;
+					var catName = model.cats[cat].catName;
+					var builtCat = catBuilder.replace(/%id%/g, catNumber);
+					namedCat = builtCat.replace("%name%", catName);
+					$("#catContainer").append(namedCat);
+					octopus.clickInit(cat);
+					currentCat = cat;
+				}
+			};
+/*
+			var viewCatList = {
+				render: function() {
+					var listBuilder = "<li><a href='#' id='%name%'</a></li>";
+					$(document).ready(function() {
+						for (i in cats) {
+							// declare which cat we're working on
+							var catNumber = model.cats[i].number;
+							var catName = model.cats[i].catName;
+
+							//make the clickable cat list
+							var builtListItem = listBuilder.replace(/%name%/g, catName);
+							$("#catList").append(builtListItem);
+							// store the cat ID number in an IIFE, build the new click listener
+							$(clickableId).click(function(numberCopy){
+								return function() {
+									var numberId = "#number" + numberCopy;
+									clicks[numberCopy] = clicks[numberCopy] + 1;
+									$(numberId).text(clicks[numberCopy]);
+									}
+								}(catNumber)) ;
+							var catId = "#cat" + catNumber;
+							var catListId = "#" + catName;
+							// show and hide the cats
+							// store the cat ID and list ID in an IIFE
+							$(catListId).click(function(catIdCopy, catListIdCopy){
+								return function() {
+									// check if a cat is displayed and hide it
+									if (toggledCat.length > 0) {
+										// if the selected cat is already displayed, do nothing
+										if (catListIdCopy == toggledCat[0]) {
+										return;
+										};
+										var removeCat = toggledCat.pop(0, 1);
+										$(removeCat).toggle();
+									};
+									// display the selected cat
+									$(catListIdCopy).toggle(catIdCopy);
+									toggledCat.push(catListIdCopy);
+									}
+								}(catListId, catId));
 						}
-					}(catNumber)) ;
-				var catId = "#cat" + catNumber;
-				var catListId = "#" + catName;
-				// show and hide the cats
-				// store the cat ID and list ID in an IIFE
-				$(catListId).click(function(catIdCopy, catListIdCopy){
-					return function() {
-						// check if a cat is displayed and hide it
-						if (toggledCat.length > 0) {
-							// if the selected cat is already displayed, do nothing
-							if (catListIdCopy == toggledCat[0]) {
-							return;
-							};
-							var removeCat = toggledCat.pop(0, 1);
-							$(removeCat).toggle();
-						};
-						// display the selected cat
-						$(catListIdCopy).toggle(catIdCopy);
-						toggledCat.push(catListIdCopy);
-						}
-					}(catListId, catId));
-			}
-		});
+					});
+				}
+			};
+*/
 	</script>
 </head>
 <body>
