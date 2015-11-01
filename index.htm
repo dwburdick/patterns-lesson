@@ -41,6 +41,7 @@
 				getCat: function(cat) {
 					catNumber = model.cats[cat].number;
 					catName = model.cats[cat].catName;
+					catCount = model.cats[cat].clickCount;
 					currentCat = cat;
 				},
 				reInit: function() {
@@ -52,6 +53,7 @@
 				},
 				clickUp: function() {
 					model.cats[currentCat].clickCount++;
+					$("#number").text(model.cats[currentCat].clickCount);
 				}
 			};
 
@@ -59,13 +61,16 @@
 				render: function(cat) {
 					octopus.getCat(cat);
 					$("#catContainer").empty();
-					var catBuilder = "<div class='cat'><div class='name' id='name%id%'>%name%</div><div class='number'>0</div><div class='catImg'><img class='catImg' id='clickableCat%id%' src='img/cat%id%.jpg'></div></div>";
+					var catBuilder = "<div class='cat'><div class='name' id='name%id%'>%name%</div><div class='number' id='number'>" + catCount + "</div><div class='catImg'><img class='catImg' id='clickableCat%id%' src='img/cat%id%.jpg'></div></div>";
 					var builtCat = catBuilder.replace(/%id%/g, catNumber);
 					namedCat = builtCat.replace("%name%", catName);
 					$("#catContainer").append(namedCat);
 					octopus.reInit(cat);
 				}
 			};
+
+// TODO: catList render method
+
 /*
 			var viewCatList = {
 				render: function() {
