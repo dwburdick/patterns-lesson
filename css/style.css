@@ -20,6 +20,21 @@ img {
 	display: none;
 }
 
+.catImg {
+	position: relative;
+	float: left;
+}
+
+.number {
+	position: absolute;
+	top: 100px;
+	width: 100%;
+	text-align: center;
+	font-size: 5em;
+	font-family: 'Arial', sans-serif;
+	font-weight: bold;
+}
+
 .listBox {
 	background-color: orange;
 	display: inline-block;
