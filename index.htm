@@ -3,7 +3,7 @@
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
-	<title>Cat clicker 0.4</title>
+	<title>Cat clicker 0.5</title>
 	<script>
 			var model = {
 				cats: [
@@ -33,33 +33,49 @@
 						"clickCount" : 0
 					},
 				],
-
-				init: function() {
-					currentCat = 0;
-				}
 			};
 
 			var octopus = {
 				init: function() {
-					model.init();
+					currentCat = model.cats[0];
 					catListArray = model.cats;
 					$(document).ready(function(cat) {
 						$("#catContainer").click(function(){
 							octopus.clickUp(cat);
 						});
+						$("#adminButton").click(function(){
+							octopus.adminToggle();
+						});
 					});
 					viewCatList.render();
 				},
 				getCat: function(cat) {
-					catImgUrl = model.cats[cat].imgUrl;
-					catName = model.cats[cat].catName;
-					catCount = model.cats[cat].clickCount;
-					currentCat = cat;
+					currentCat = catListArray[cat];
+					catImgUrl = currentCat.imgUrl;
+					catName = currentCat.catName;
+					catCount = currentCat.clickCount;
 				},
 				clickUp: function() {
-					model.cats[currentCat].clickCount++;
-					$("#number").text(model.cats[currentCat].clickCount);
-				}
+					currentCat.clickCount++;
+					$("#number").text(currentCat.clickCount);
+				},
+				adminView: false,
+				adminToggle: function() {
+					octopus.adminView = !octopus.adminView;
+					viewAdmin.render();
+				},
+			};
+
+			var viewAdmin = {
+				render: function() {
+					if (octopus.adminView == true) {
+						$("#adminFields").empty();
+						var adminBuilder = "<div class='adminFields'>Name<br><input type='text' name='catNameField' value=''><br>Image URL<br><input type='text' name='imgUrlField' value=''><br>Click count<br><input type='text' name='countField' value=''></div><br><input type='button' value='Save' name='saveButton'><br><input type='button' value='Cancel' name='cancelButton'>";
+						$("#adminFields").append(adminBuilder)
+					} else {
+						$("#adminFields").empty();
+					}
+				},
 			};
 
 			var viewCat = {
@@ -70,11 +86,11 @@
 					var builtCat = catBuilder.replace(/%imgUrl%/g, catImgUrl);
 					namedCat = builtCat.replace(/%name%/g, catName);
 					$("#catContainer").append(namedCat);
+					if (octopus.adminView) {
+						viewAdmin.render();
+					};
 				}
 			};
-
-// TODO: catList render method
-
 
 			var viewCatList = {
 				render: function() {
@@ -90,12 +106,12 @@
 							$(catListId).click(function(catListNumberCopy){
 								return function() {
 									// if the selected cat is already displayed, do nothing
-									if (catListNumberCopy == currentCat) {
+									if (catListName == currentCat.catName) {
 									return;
 									};
 									// display the selected cat
-									currentCat = catListNumberCopy
-									viewCat.render(currentCat);
+									currentCat = catListArray[catListNumberCopy]
+									viewCat.render(catListNumberCopy);
 									}
 								}(catListNumber));
 						}
@@ -114,8 +130,11 @@
 			</ul>
 		</div>
 		<div class="catContainer" id="catContainer">
-
 		</div>
+	</div>
+	<div class="admin" id="admin">
+		<input type="button" value="Admin" id="adminButton">
+		<div id="adminFields"></div>
 	</div>
 </body>
 </html>
