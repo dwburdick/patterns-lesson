@@ -27,13 +27,13 @@
 				"catName" : "Groucho",
 			},
 		];
-		
+
 		var clicks = [0];
 
 		var catBuilder = "<div class='cat' id='cat%id%'><div class='name' id='name%id%'>%name%</div><div class='catImg'><img id='clickableCat%id%' src='img/cat%id%.jpg'></div><div class='number' id='number%id%'>0</div></div>";
 
 		var listBuilder = "<li><a href='#' id='%name%'>%name%</a></li>"
-
+		var toggledCat = [];
 		$(document).ready(function() {
 			for (i in cats) {
 				// declare which cat we're working on
@@ -49,7 +49,7 @@
 				var clickableId = "#clickableCat" + catNumber;
 				//make the clickable cat list
 				var builtListItem = listBuilder.replace(/%name%/g, catName);
-				$("#catList").append(builtListItem);				
+				$("#catList").append(builtListItem);
 				// store the cat ID number in an IIFE, build the new click listener
 				$(clickableId).click(function(numberCopy){
 					return function() {
@@ -58,25 +58,38 @@
 						$(numberId).text(clicks[numberCopy]);
 						}
 					}(catNumber)) ;
-				/* cat list click functionality under construction
 				var catId = "#cat" + catNumber;
 				var catListId = "#" + catName;
-				console.log(catListId);
-				$(catListId).toggle(catId);
-				*/
-
+				// show and hide the cats
+				// store the cat ID and list ID in an IIFE
+				$(catListId).click(function(catIdCopy, catListIdCopy){
+					return function() {
+						// check if a cat is displayed and hide it
+						if (toggledCat.length > 0) {
+							// if the selected cat is already displayed, do nothing
+							if (catListIdCopy == toggledCat[0]) {
+							return;
+							};
+							var removeCat = toggledCat.pop(0, 1);
+							$(removeCat).toggle();
+						};
+						// display the selected cat
+						$(catListIdCopy).toggle(catIdCopy);
+						toggledCat.push(catListIdCopy);
+						}
+					}(catListId, catId));
 			}
 		});
 	</script>
 </head>
 <body>
 	<div class="container">
-		<div class="catContainer" id="catContainer">
-
-		</div>
 		<div class="listBox">
 			<ul id="catList">
 			</ul>
+		</div>
+		<div class="catContainer" id="catContainer">
+
 		</div>
 	</div>
 </body>
