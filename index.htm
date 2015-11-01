@@ -58,6 +58,7 @@
 				clickUp: function() {
 					currentCat.clickCount++;
 					$("#number").text(currentCat.clickCount);
+					viewAdmin.render();
 				},
 				adminView: false,
 				adminToggle: function() {
@@ -70,7 +71,7 @@
 				render: function() {
 					if (octopus.adminView == true) {
 						$("#adminFields").empty();
-						var adminBuilder = "<div class='adminFields'>Name<br><input type='text' name='catNameField' value=''><br>Image URL<br><input type='text' name='imgUrlField' value=''><br>Click count<br><input type='text' name='countField' value=''></div><br><input type='button' value='Save' name='saveButton'><br><input type='button' value='Cancel' name='cancelButton'>";
+						var adminBuilder = "<div class='adminFields'>Name<br><input type='text' name='catNameField' value='" + currentCat.catName + "'><br>Image URL<br><input type='text' name='imgUrlField' value='" + currentCat.imgUrl + "'><br>Click count<br><input type='text' name='countField' value='" + currentCat.clickCount + "'></div><br><input type='button' value='Save' name='saveButton'><br><input type='button' value='Cancel' name='cancelButton'>";
 						$("#adminFields").append(adminBuilder)
 					} else {
 						$("#adminFields").empty();
