@@ -5,51 +5,56 @@
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<title>Cat clicker 0.4</title>
 	<script>
-			var currentCat = 0;
-
 			var model = {
 				cats: [
 					{
-						"number" : "1",
+						"imgUrl" : "cat1.jpg",
 						"catName" : "Fred",
 						"clickCount" : 0
 					},
 					{
-						"number" : "2",
+						"imgUrl" : "cat2.jpg",
 						"catName" : "Ethel",
 						"clickCount" : 0
 					},
 					{
-						"number" : "3",
+						"imgUrl" : "cat3.jpg",
 						"catName" : "Ricky",
 						"clickCount" : 0
 					},
 					{
-						"number" : "4",
+						"imgUrl" : "cat4.jpg",
 						"catName" : "Lucy",
 						"clickCount" : 0
 					},
 					{
-						"number" : "5",
+						"imgUrl" : "cat5.jpg",
 						"catName" : "Groucho",
 						"clickCount" : 0
 					},
 				],
+
+				init: function() {
+					currentCat = 0;
+				}
 			};
 
 			var octopus = {
-				getCat: function(cat) {
-					catNumber = model.cats[cat].number;
-					catName = model.cats[cat].catName;
-					catCount = model.cats[cat].clickCount;
-					currentCat = cat;
-				},
-				reInit: function() {
+				init: function() {
+					model.init();
+					catListArray = model.cats;
 					$(document).ready(function(cat) {
 						$("#catContainer").click(function(){
 							octopus.clickUp(cat);
 						});
 					});
+					viewCatList.render();
+				},
+				getCat: function(cat) {
+					catImgUrl = model.cats[cat].imgUrl;
+					catName = model.cats[cat].catName;
+					catCount = model.cats[cat].clickCount;
+					currentCat = cat;
 				},
 				clickUp: function() {
 					model.cats[currentCat].clickCount++;
@@ -61,62 +66,45 @@
 				render: function(cat) {
 					octopus.getCat(cat);
 					$("#catContainer").empty();
-					var catBuilder = "<div class='cat'><div class='name' id='name%id%'>%name%</div><div class='number' id='number'>" + catCount + "</div><div class='catImg'><img class='catImg' id='clickableCat%id%' src='img/cat%id%.jpg'></div></div>";
-					var builtCat = catBuilder.replace(/%id%/g, catNumber);
-					namedCat = builtCat.replace("%name%", catName);
+					var catBuilder = "<div class='cat'><div class='name'>%name%</div><div class='number' id='number'>" + catCount + "</div><div class='catImg'><img class='catImg' id='clickable%name%' src='img/%imgUrl%'></div></div>";
+					var builtCat = catBuilder.replace(/%imgUrl%/g, catImgUrl);
+					namedCat = builtCat.replace(/%name%/g, catName);
 					$("#catContainer").append(namedCat);
-					octopus.reInit(cat);
 				}
 			};
 
 // TODO: catList render method
 
-/*
+
 			var viewCatList = {
 				render: function() {
-					var listBuilder = "<li><a href='#' id='%name%'</a></li>";
+					var listBuilder = "<li><a href='#' id='%name%'>%name%</a></li>";
 					$(document).ready(function() {
-						for (i in cats) {
-							// declare which cat we're working on
-							var catNumber = model.cats[i].number;
-							var catName = model.cats[i].catName;
-
-							//make the clickable cat list
-							var builtListItem = listBuilder.replace(/%name%/g, catName);
+						for (i in catListArray) {
+							var catListName = catListArray[i].catName;
+							var catListId = "#" + catListName;
+							var catListNumber = i;
+							var builtListItem = listBuilder.replace(/%name%/g, catListName);
 							$("#catList").append(builtListItem);
 							// store the cat ID number in an IIFE, build the new click listener
-							$(clickableId).click(function(numberCopy){
+							$(catListId).click(function(catListNumberCopy){
 								return function() {
-									var numberId = "#number" + numberCopy;
-									clicks[numberCopy] = clicks[numberCopy] + 1;
-									$(numberId).text(clicks[numberCopy]);
-									}
-								}(catNumber)) ;
-							var catId = "#cat" + catNumber;
-							var catListId = "#" + catName;
-							// show and hide the cats
-							// store the cat ID and list ID in an IIFE
-							$(catListId).click(function(catIdCopy, catListIdCopy){
-								return function() {
-									// check if a cat is displayed and hide it
-									if (toggledCat.length > 0) {
-										// if the selected cat is already displayed, do nothing
-										if (catListIdCopy == toggledCat[0]) {
-										return;
-										};
-										var removeCat = toggledCat.pop(0, 1);
-										$(removeCat).toggle();
+									// if the selected cat is already displayed, do nothing
+									if (catListNumberCopy == currentCat) {
+									return;
 									};
 									// display the selected cat
-									$(catListIdCopy).toggle(catIdCopy);
-									toggledCat.push(catListIdCopy);
+									currentCat = catListNumberCopy
+									viewCat.render(currentCat);
 									}
-								}(catListId, catId));
+								}(catListNumber));
 						}
 					});
 				}
 			};
-*/
+
+
+			octopus.init();
 	</script>
 </head>
 <body>
