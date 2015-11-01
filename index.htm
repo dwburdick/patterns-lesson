@@ -38,7 +38,12 @@
 			};
 
 			var octopus = {
-				clickInit: function() {
+				getCat: function(cat) {
+					catNumber = model.cats[cat].number;
+					catName = model.cats[cat].catName;
+					currentCat = cat;
+				},
+				reInit: function() {
 					$(document).ready(function(cat) {
 						$("#catContainer").click(function(){
 							octopus.clickUp(cat);
@@ -52,15 +57,13 @@
 
 			var viewCat = {
 				render: function(cat) {
+					octopus.getCat(cat);
 					$("#catContainer").empty();
 					var catBuilder = "<div class='cat'><div class='name' id='name%id%'>%name%</div><div class='number'>0</div><div class='catImg'><img class='catImg' id='clickableCat%id%' src='img/cat%id%.jpg'></div></div>";
-					var catNumber = model.cats[cat].number;
-					var catName = model.cats[cat].catName;
 					var builtCat = catBuilder.replace(/%id%/g, catNumber);
 					namedCat = builtCat.replace("%name%", catName);
 					$("#catContainer").append(namedCat);
-					octopus.clickInit(cat);
-					currentCat = cat;
+					octopus.reInit(cat);
 				}
 			};
 /*
