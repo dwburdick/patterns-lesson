@@ -78,7 +78,7 @@
 					}
 				},
 			};
-
+			// find out why I get stuck on Groucho; viewCat.render(3) works ...
 			var viewCat = {
 				render: function(cat) {
 					octopus.getCat(cat);
@@ -104,17 +104,17 @@
 							var builtListItem = listBuilder.replace(/%name%/g, catListName);
 							$("#catList").append(builtListItem);
 							// store the cat ID number in an IIFE, build the new click listener
-							$(catListId).click(function(catListNumberCopy){
+							$(catListId).click(function(catListNameCopy, catListNumberCopy){
 								return function() {
 									// if the selected cat is already displayed, do nothing
-									if (catListName == currentCat.catName) {
+									if (catListNameCopy == currentCat.catName) {
 									return;
 									};
 									// display the selected cat
 									currentCat = catListArray[catListNumberCopy]
 									viewCat.render(catListNumberCopy);
 									}
-								}(catListNumber));
+								}(catListName, catListNumber));
 						}
 					});
 				}
