@@ -50,10 +50,9 @@
 					viewCatList.render();
 				},
 				getCat: function(cat) {
-					currentCat = catListArray[cat];
-					catImgUrl = currentCat.imgUrl;
-					catName = currentCat.catName;
-					catCount = currentCat.clickCount;
+					catImgUrl = cat.imgUrl;
+					catName = cat.catName;
+					catCount = cat.clickCount;
 				},
 				clickUp: function() {
 					currentCat.clickCount++;
@@ -65,10 +64,23 @@
 					octopus.adminView = !octopus.adminView;
 					viewAdmin.render();
 				},
-				// create adminSave method
-				/* adminSave: function() {
-
-				}, */
+				adminInit: function() {
+					$(document).ready(function(){
+						$("#saveButton").click(function(){
+						octopus.adminSave();
+						});
+					});
+				},
+				adminSave: function() {
+					var saveName = $("#catNameField").val();
+					var saveCount = $("#countField").val();
+					var saveUrl = $("#imgUrlField").val();
+					currentCat.catName = saveName;
+					currentCat.clickCount = saveCount;
+					currentCat.imgUrl = saveUrl;
+					viewCat.render(currentCat);
+					viewCatList.render();
+				}
 				// create adminCancel method
 			};
 
@@ -76,11 +88,12 @@
 				render: function() {
 					if (octopus.adminView == true) {
 						$("#adminFields").empty();
-						var adminBuilder = "<div class='adminFields'>Name<br><input type='text' name='catNameField' value='" + currentCat.catName + "'><br>Image URL<br><input type='text' name='imgUrlField' value='" + currentCat.imgUrl + "'><br>Click count<br><input type='text' name='countField' value='" + currentCat.clickCount + "'></div><br><input type='button' value='Save' name='saveButton'><br><input type='button' value='Cancel' name='cancelButton'>";
-						$("#adminFields").append(adminBuilder)
+						var adminBuilder = "<div class='adminFields'>Name<br><input type='text' id='catNameField' value='" + currentCat.catName + "'><br>Image URL<br><input type='text' id='imgUrlField' value='" + currentCat.imgUrl + "'><br>Click count<br><input type='text' id='countField' value='" + currentCat.clickCount + "'></div><br><input type='button' value='Save' id='saveButton'><br><input type='button' value='Cancel' id='cancelButton'>";
+						$("#adminFields").append(adminBuilder);
+						octopus.adminInit();
 					} else {
 						$("#adminFields").empty();
-					}
+					};
 				},
 			};
 			var viewCat = {
@@ -99,6 +112,7 @@
 
 			var viewCatList = {
 				render: function() {
+					$("#catList").empty();
 					var listBuilder = "<li><a href='#' id='%name%'>%name%</a></li>";
 					$(document).ready(function() {
 						for (i in catListArray) {
@@ -116,7 +130,7 @@
 									};
 									// display the selected cat
 									currentCat = catListArray[catListNumberCopy]
-									viewCat.render(catListNumberCopy);
+									viewCat.render(currentCat);
 									}
 								}(catListName, catListNumber));
 						}
